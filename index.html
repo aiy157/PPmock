@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ข้อสอบจำลอง กว. — Computer Programming (Python)</title>
+  <meta name="description" content="ระบบทำข้อสอบจำลองแนวสภาวิศวกร (กว.) วิชา Computer Programming ภาษา Python พร้อมเฉลยและคำอธิบายทุกข้อ">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" id="brandLink">
+      <span class="logo" id="brandLogo">🐍</span>
+      <span>
+        <strong id="brandTitle">KW-Python Mock Exam</strong>
+        <small id="brandSub">แนวข้อสอบ กว. · Computer Programming</small>
+      </span>
+    </a>
+    <button class="btn ghost small" id="themeBtn" title="สลับธีม">🌓</button>
+  </header>
+
+  <main id="app">
+    <!-- ================= HOME ================= -->
+    <section id="view-home" class="view">
+      <div class="hero card">
+        <h1 id="heroTitle">ข้อสอบจำลอง กว. <span class="accent">ภาษา Python</span></h1>
+        <p id="heroDesc">ฝึกทำข้อสอบแนวสภาวิศวกร วิชา Computer Programming พร้อมเฉลยและคำอธิบายละเอียดทุกข้อ
+          โค้ดทุกข้อที่ถามผลลัพธ์ผ่านการรันตรวจด้วย Python จริง</p>
+        <div class="stats" id="homeStats"></div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <h2>⚙️ ตั้งค่าการสอบ</h2>
+
+          <label class="label">📚 เลือกรายวิชา</label>
+          <div class="seg" id="subjectSeg">
+            <button data-v="python" class="active">🐍 Computer Programming<small>Python · ข้อสอบ กว. (150 ข้อ)</small></button>
+            <button data-v="intro_en">⚙️ Introduction to EN<small>แนะนำวิชาชีพ & เลือกสาขา (50 ข้อ)</small></button>
+          </div>
+
+          <label class="label">โหมด</label>
+          <div class="seg" id="modeSeg">
+            <button data-v="exam" class="active">📝 สอบจำลอง<small>จับเวลา · เฉลยตอนส่ง</small></button>
+            <button data-v="practice">💡 ฝึกฝน<small>เฉลยทันทีทีละข้อ</small></button>
+          </div>
+
+          <label class="label">จำนวนข้อ</label>
+          <div class="seg compact" id="countSeg">
+            <button data-v="20">20</button>
+            <button data-v="50" class="active">50</button>
+            <button data-v="100">100</button>
+            <button data-v="all">ทั้งหมด</button>
+          </div>
+
+          <label class="label">หมวดเนื้อหา</label>
+          <div class="cats" id="catList"></div>
+          <div class="row gap">
+            <button class="btn ghost small" id="catAll">เลือกทั้งหมด</button>
+            <button class="btn ghost small" id="catNone">ไม่เลือก</button>
+          </div>
+
+          <label class="check"><input type="checkbox" id="optShuffle" checked> สุ่มลำดับข้อ</label>
+          <label class="check" id="timerOpt"><input type="checkbox" id="optTimer" checked> จับเวลา (1.5 นาที/ข้อ)</label>
+
+          <button class="btn primary big" id="startBtn">เริ่มทำข้อสอบ →</button>
+          <button class="btn warn big" id="wrongBtn">🔁 ทบทวนเฉพาะข้อที่เคยตอบผิด <span id="wrongCount"></span></button>
+          <button class="btn ghost big" id="browseBtn">📖 ดูข้อสอบพร้อมเฉลยทั้งหมด</button>
+        </div>
+
+        <div class="card">
+          <h2>📊 ประวัติการสอบ</h2>
+          <div id="history"></div>
+          <button class="btn ghost small" id="clearHist">ล้างประวัติ</button>
+          <hr>
+          <h3>วิธีใช้</h3>
+          <ul class="tips">
+            <li><b>สอบจำลอง</b> — ทำครบแล้วกด “ส่งคำตอบ” เพื่อดูคะแนนและเฉลย</li>
+            <li><b>ฝึกฝน</b> — เลือกคำตอบแล้วเห็นเฉลยพร้อมคำอธิบายทันที</li>
+            <li>คีย์ลัด: <kbd>1</kbd>–<kbd>4</kbd> เลือกคำตอบ, <kbd>←</kbd> <kbd>→</kbd> เปลี่ยนข้อ, <kbd>F</kbd> ปักธง</li>
+            <li>ระบบจำข้อที่ตอบผิดไว้ให้กลับมาทบทวนได้</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= QUIZ ================= -->
+    <section id="view-quiz" class="view hidden">
+      <div class="quizbar card">
+        <div class="qinfo">
+          <span id="qCounter">ข้อ 1/50</span>
+          <span class="pill" id="qCat"></span>
+        </div>
+        <div class="progress"><div id="progressFill"></div></div>
+        <div class="qtools">
+          <span class="timer" id="timer">⏱ --:--</span>
+          <button class="btn ghost small" id="quitBtn">ออก</button>
+          <button class="btn primary small" id="submitBtn">ส่งคำตอบ</button>
+        </div>
+      </div>
+
+      <div class="quizgrid">
+        <div class="card qcard">
+          <div class="qhead">
+            <span class="qid" id="qId"></span>
+            <button class="btn ghost small" id="flagBtn">🚩 ปักธง</button>
+          </div>
+          <div class="qtext" id="qText"></div>
+          <pre class="code" id="qCode"></pre>
+          <div class="choices" id="qChoices"></div>
+          <div class="explain hidden" id="qExplain"></div>
+          <div class="row between nav">
+            <button class="btn ghost" id="prevBtn">← ก่อนหน้า</button>
+            <button class="btn primary" id="nextBtn">ถัดไป →</button>
+          </div>
+        </div>
+
+        <aside class="card navpanel">
+          <h3>แผนผังข้อสอบ</h3>
+          <div class="legend">
+            <span><i class="dot answered"></i>ตอบแล้ว</span>
+            <span><i class="dot flagged"></i>ปักธง</span>
+            <span><i class="dot"></i>ยังไม่ตอบ</span>
+          </div>
+          <div class="qnav" id="qNav"></div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ================= RESULT ================= -->
+    <section id="view-result" class="view hidden">
+      <div class="card result-hero">
+        <div class="ring" id="scoreRing"><span id="scorePct">0%</span></div>
+        <div>
+          <h1 id="resultTitle">ผลการสอบ</h1>
+          <p id="resultDetail"></p>
+          <div class="row gap wrap">
+            <button class="btn primary" id="retryBtn">ทำชุดนี้อีกครั้ง</button>
+            <button class="btn warn" id="retryWrongBtn">ทำเฉพาะข้อที่ผิด</button>
+            <button class="btn ghost" id="homeBtn">กลับหน้าหลัก</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>คะแนนแยกตามหมวด</h2>
+        <div id="catBreakdown"></div>
+      </div>
+      <div class="card">
+        <div class="row between wrap">
+          <h2>เฉลยและคำอธิบาย</h2>
+          <div class="seg compact" id="reviewFilter">
+            <button data-v="all" class="active">ทั้งหมด</button>
+            <button data-v="wrong">ผิด/ไม่ตอบ</button>
+            <button data-v="right">ถูก</button>
+          </div>
+        </div>
+        <div id="reviewList"></div>
+      </div>
+    </section>
+
+    <!-- ================= BROWSE ================= -->
+    <section id="view-browse" class="view hidden">
+      <div class="card">
+        <div class="row between wrap">
+          <h2>📖 คลังข้อสอบพร้อมเฉลย</h2>
+          <button class="btn ghost small" id="browseBack">← กลับหน้าหลัก</button>
+        </div>
+        <div class="row gap wrap filters">
+          <input type="search" id="browseSearch" placeholder="ค้นหาคำในโจทย์/โค้ด...">
+          <select id="browseCat"></select>
+          <label class="check inline"><input type="checkbox" id="browseHide"> ซ่อนเฉลย (คลิกเพื่อดู)</label>
+        </div>
+        <p class="muted" id="browseCount"></p>
+        <div id="browseList"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    ระบบข้อสอบจำลองเพื่อการศึกษาและการเตรียมตัวสอบ — รองรับวิชา Computer Programming (Python - แนวข้อสอบ กว.) และ Introduction to Engineering (แนะนำวิชาชีพวิศวกรรม & เกณฑ์เลือกสาขา)
+  </footer>
+
+  <script src="questions/part1.js"></script>
+  <script src="questions/part2.js"></script>
+  <script src="questions/part3.js"></script>
+  <script src="questions/intro_en.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
