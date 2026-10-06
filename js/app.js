@@ -92,7 +92,7 @@
   };
 
   /* ================= HOME ================= */
-  const settings = { mode: "exam", count: "50" };
+  const settings = { mode: "practice", count: "50" };
 
   function segment(el, key, onChange) {
     el.addEventListener("click", e => {
@@ -105,6 +105,7 @@
   }
 
   segment($("#modeSeg"), "mode", v => { $("#timerOpt").classList.toggle("hidden", v !== "exam"); });
+  $("#timerOpt").classList.toggle("hidden", settings.mode !== "exam");
   segment($("#countSeg"), "count");
 
   segment($("#subjectSeg"), null, v => {
@@ -279,12 +280,20 @@
     const ex = $("#qExplain");
     if (revealed) {
       const ok = sel === q.answer;
+      const isLast = idx === n - 1;
+      const btnLabel = isLast ? "📊 จบชุด & สรุปคะแนน →" : "👉 ข้อถัดไป →";
       ex.className = `explain ${ok ? "ok" : "bad"}`;
-      ex.innerHTML = `<div class="verdict">${ok ? "✅ ถูกต้อง!" : `❌ ยังไม่ถูก — คำตอบที่ถูกคือ ${KEYS[q.answer]}`}</div>${rich(q.explain)}`;
+      ex.innerHTML = `
+        <div class="verdict">${ok ? "✅ ถูกต้อง!" : `❌ ยังไม่ถูก — คำตอบที่ถูกคือ ${KEYS[q.answer]}`}</div>
+        <div class="explain-text">${rich(q.explain)}</div>
+        <div class="explain-action">
+          <button class="btn primary" id="expNextBtn">${btnLabel}</button>
+        </div>`;
+      $("#expNextBtn").onclick = () => go(idx + 1);
     } else ex.className = "explain hidden";
 
     $("#prevBtn").disabled = idx === 0;
-    $("#nextBtn").textContent = idx === n - 1 ? (session.mode === "exam" ? "ส่งคำตอบ ✓" : "จบการฝึก ✓") : "ถัดไป →";
+    $("#nextBtn").textContent = idx === n - 1 ? (session.mode === "exam" ? "ส่งคำตอบ ✓" : "จบการฝึก & ดูคะแนน ✓") : "ถัดไป →";
     renderNav();
   }
 
@@ -313,6 +322,11 @@
     session.answers[idx] = i;
     persist();
     renderQuestion();
+    if (session.mode === "practice") {
+      setTimeout(() => {
+        $("#qExplain")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }, 40);
+    }
   }
 
   function go(i) {
@@ -321,6 +335,7 @@
     session.cur = i;
     persist();
     renderQuestion();
+    window.scrollTo({ top: $("#view-quiz").offsetTop - 20, behavior: "smooth" });
   }
 
   $("#qChoices").addEventListener("click", e => { const b = e.target.closest(".choice"); if (b && !b.disabled) choose(+b.dataset.i); });

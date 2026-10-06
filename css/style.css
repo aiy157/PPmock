@@ -194,7 +194,9 @@ pre.code .ln::before { counter-increment: ln; content: counter(ln); display: inl
 }
 .explain.ok { border-left-color: var(--ok); }
 .explain.bad { border-left-color: var(--bad); }
-.explain .verdict { font-weight: 700; margin-bottom: 4px; }
+.explain .verdict { font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; }
+.explain-action { margin-top: 14px; display: flex; justify-content: flex-end; }
+.explain-action .btn { min-width: 140px; }
 .explain code, .qtext code { font-family: "JetBrains Mono", monospace; background: var(--bg2); padding: 1px 6px; border-radius: 6px; font-size: .9em; }
 .nav { margin-top: 20px; }
 
@@ -207,6 +209,7 @@ pre.code .ln::before { counter-increment: ln; content: counter(ln); display: inl
 .qnav button {
   aspect-ratio: 1; border-radius: 8px; border: 1px solid var(--line); background: var(--card2);
   color: var(--text); font: inherit; font-size: .82rem; font-weight: 600; cursor: pointer; position: relative;
+  touch-action: manipulation;
 }
 .qnav button.answered { background: var(--accent); border-color: var(--accent); color: #fff; }
 .qnav button.correct { background: var(--ok); border-color: var(--ok); color: #fff; }
@@ -247,20 +250,43 @@ pre.code .ln::before { counter-increment: ln; content: counter(ln); display: inl
 }
 .filters input[type=search] { flex: 1; min-width: 220px; }
 
-/* ---------- responsive ---------- */
+/* ---------- responsive (Mobile Friendly) ---------- */
 @media (max-width: 900px) {
-  .grid2, .quizgrid { grid-template-columns: 1fr; }
-  .navpanel { position: static; order: -1; }
-  .qnav { grid-template-columns: repeat(10, 1fr); max-height: 140px; }
-  .quizbar { grid-template-columns: 1fr auto; top: 62px; }
-  .quizbar .progress { grid-column: 1 / -1; grid-row: 2; }
+  .grid2, .quizgrid { grid-template-columns: 1fr; gap: 14px; }
+  .navpanel { position: static; order: 2; margin-top: 10px; }
+  .qcard { order: 1; }
+  .qnav { grid-template-columns: repeat(8, 1fr); max-height: 160px; }
+  .quizbar {
+    display: flex; flex-wrap: wrap; justify-content: space-between;
+    gap: 10px; padding: 10px 14px; top: 58px;
+  }
+  .qinfo { font-size: .95rem; }
+  .progress { width: 100%; order: 3; height: 6px; }
+  .qtools { order: 2; }
   .bar-row { grid-template-columns: 1fr 80px; }
   .bar-row .bar { grid-column: 1 / -1; grid-row: 2; }
   .cats { grid-template-columns: 1fr; }
 }
 @media (max-width: 520px) {
-  .hero h1 { font-size: 1.5rem; }
-  .qnav { grid-template-columns: repeat(7, 1fr); }
-  .topbar { padding: 10px 14px; }
-  .card { padding: 16px; }
+  main { padding: 12px 10px 30px; }
+  .hero h1 { font-size: 1.45rem; }
+  .hero p { font-size: .9rem; }
+  .card { padding: 14px; border-radius: 14px; }
+  .topbar { padding: 8px 12px; }
+  .brand .logo { font-size: 24px; }
+  .brand strong { font-size: .95rem; }
+  .brand small { display: none; }
+  .choice { padding: 12px; gap: 10px; min-height: 48px; }
+  .choice .key { flex: 0 0 28px; height: 28px; font-size: .9rem; }
+  .choice .ctext { font-size: .94rem; }
+  .qnav { grid-template-columns: repeat(6, 1fr); gap: 5px; }
+  .qnav button { font-size: .75rem; }
+  .qtext { font-size: 1.02rem; }
+  pre.code { font-size: .84rem; padding: 10px 12px; }
+  .seg button { padding: 8px 10px; font-size: .88rem; }
+  .btn.big { padding: 12px; font-size: .95rem; }
+  .result-hero { flex-direction: column; text-align: center; justify-content: center; }
+  .result-hero .row { justify-content: center; }
+  .explain-action { justify-content: stretch; }
+  .explain-action .btn { width: 100%; }
 }
